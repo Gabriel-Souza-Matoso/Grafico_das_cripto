@@ -1,4 +1,4 @@
-from graficos import Dashboard
+from graficos import Dashboard as Db
 
-cu = Dashboard()
-cu.abrir_janela()
+Dashboard = Db()
+Dashboard.abrir_janela()

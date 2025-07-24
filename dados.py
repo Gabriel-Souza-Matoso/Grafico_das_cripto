@@ -1,7 +1,21 @@
 import pandas as pd
 import logging
 
+'''
+---- data minima ---
+btc = 2014-09-17
+bnb = 2017-11-09
+eth = 2017-11-09
+sol = 2020-04-10
+xrp =  2017-11-09
 
+--- data maxima ---
+btc = 2024-09-08
+bnb = 2024-09-08
+eth = 2024-09-08
+sol = 2024-09-08
+xrp = 2024-09-08
+'''
 class DadosCripto:
     def __init__(self, tipo_da_cripto_csv):
         self.tipo_cripito = tipo_da_cripto_csv
@@ -11,6 +25,50 @@ class DadosCripto:
         self.valor_MIN = self.dados["Low"]
         self.valor_inicial_diario = self.dados["Open"]
         self.valor_final_diario = self.dados["Close"]
+
+    def tratamento_das_strings_datas(self, data_inicial, data_final):
+        '''essa função tem o papel de deixar os
+        inputs no formato compativel com a função valores_entre_datas'''
+        cont = 0
+        # --- strays que guardaram as letras ---
+        valor_dia_i, valor_mes_i, valor_ano_i = [], [], []
+        valor_dia_F, valor_mes_F, valor_ano_F = [], [], []
+        # =-=-=- transforma a string das datas no formato utilizado no codigo -=-=-=
+        for i in data_inicial:
+            match cont:
+                case 0:
+                    valor_ano_i.append(i)
+                    if i == "-":
+                        valor_ano_i.pop(-1)
+                        cont += 1
+                case 1:
+                    valor_mes_i.append(i)
+                    if i == "-":
+                        valor_mes_i.pop(-1)
+                        cont += 1
+                case 2:
+                    valor_dia_i.append(i)
+
+        cont = 0
+
+        for j in data_final:
+            match cont:
+                case 0:
+                    valor_ano_F.append(j)
+                    if j == "-":
+                        valor_ano_F.pop(-1)
+                        cont += 1
+                case 1:
+                    valor_mes_F.append(j)
+                    if j == "-":
+                        valor_mes_F.pop(-1)
+                        cont += 1
+                case 2:
+                    valor_dia_F.append(j)
+
+        dia_i, mes_i, ano_i = int("".join(valor_dia_i)), int("".join(valor_mes_i)), int("".join(valor_ano_i))
+        dia_F, mes_F, ano_F = int("".join(valor_dia_F)), int("".join(valor_mes_F)), int("".join(valor_ano_F))
+        return dia_i, mes_i, ano_i, dia_F, mes_F, ano_F
 
     def valores_por_data_especifica(self, dia, mes, ano):
         ''' essa função retorna todas as informações de valores de um dia especifico, tais informações com
@@ -59,7 +117,6 @@ class DadosCripto:
                 limite_de_dias_por_mes = 30
 
             return limite_de_dias_por_mes
-
         return data_organizada
 
     def valores_de_um_mes_inteiro(self, mes, ano, df_inteiro=None):
@@ -116,11 +173,9 @@ class DadosCripto:
 
         return list(datas_dos_valores), list(valor_inicial_diario_exato), list(valor_final_diario_exato)
 
-    def valores_entre_datas(self, dia_inicio, mes_inicio, ano_inicio, dia_fim, mes_fim, ano_fim):
-        '''
-        essa funçãos retorna o dataframe inteiro entre datas
-        '''
-
+    def valores_entre_datas(self, data_inicial, data_final):
+        dia_inicio, mes_inicio, ano_inicio, dia_fim, mes_fim, ano_fim = self.tratamento_das_strings_datas(data_inicial,
+                                                                                                          data_final)
         guardar_valores_diarios_finais = []
         guardar_valores_diarios_iniciais = []
         guardar_datas = []
@@ -128,44 +183,59 @@ class DadosCripto:
         data_final = self.__organizar_data(dia_fim, mes_fim, ano_fim)
         data_lida_atualmente = 0
         controle_dos_loops = 0
+
+        dfs_coletados = []
+
         while True:
-            if data_lida_atualmente == data_final: break
+            if data_lida_atualmente == data_final:
+                break
             if controle_dos_loops == 0:
                 for j in range(mes_inicio, 12, 1):
                     limite_de_dias_do_mes = self.__organizar_data(0, 0, 0, 0)
                     for i in range(dia_inicio, limite_de_dias_do_mes, 1):
                         try:
-                            if data_lida_atualmente == data_final: break
+                            if data_lida_atualmente == data_final:
+                                break
                             data_lida_atualmente = self.__organizar_data(i, j, ano_inicio)
                             df_do_periodo = self.dados.loc[self.dia_da_cripto == data_lida_atualmente]
+                            if not df_do_periodo.empty:
+                                dfs_coletados.append(df_do_periodo)
                             guardar_datas.append(df_do_periodo["Date"].iloc[0])
                             guardar_valores_diarios_iniciais.append(df_do_periodo["Open"].iloc[0])
                             guardar_valores_diarios_finais.append(df_do_periodo["Close"].iloc[0])
                         except:
-                            pass
+                            continue
                 controle_dos_loops += 1
             else:
                 for j in range(1, 12, 1):
                     limite_de_dias_do_mes = self.__organizar_data(0, 0, 0, 0)
-                    if data_lida_atualmente == data_final: break
+                    if data_lida_atualmente == data_final:
+                        break
                     for i in range(1, limite_de_dias_do_mes, 1):
                         try:
-                            if data_lida_atualmente == data_final: break
+                            if data_lida_atualmente == data_final:
+                                break
                             data_lida_atualmente = self.__organizar_data(i, j, ano_inicio + controle_dos_loops, None)
                             df_do_periodo = self.dados.loc[self.dia_da_cripto == data_lida_atualmente]
+                            if not df_do_periodo.empty:
+                                dfs_coletados.append(df_do_periodo)
                             guardar_datas.append(df_do_periodo["Date"].iloc[0])
                             guardar_valores_diarios_iniciais.append(round(df_do_periodo["Open"].iloc[0], 2))
                             guardar_valores_diarios_finais.append(round(df_do_periodo["Close"].iloc[0], 2))
                         except:
-                            pass
+                            continue
                 controle_dos_loops += 1
+
         logging.info(data_lida_atualmente, data_final)
         guardar_valores_diarios_finais_limpo = list(map(float, guardar_valores_diarios_finais))
         guardar_valores_diarios_iniciais_limpo = list(map(float, guardar_valores_diarios_iniciais))
 
-        return list(guardar_datas), list(guardar_valores_diarios_iniciais_limpo), list(
-            guardar_valores_diarios_finais_limpo)
+        if dfs_coletados:
+            df_resultado = pd.concat(dfs_coletados, ignore_index=True)
+        else:
+            df_resultado = pd.DataFrame()
 
+        return df_resultado
     def retornar_todo_df(self, coluna=None):
         match coluna:
             case "Date":
@@ -183,19 +253,21 @@ class DadosCripto:
 
     def retornar_tipo_da_cripto(self):
         match self.tipo_cripito:
-            case 'BNB_USD_daily_data.csv':
+            case 'dados/BNB_USD_daily_data.csv':
                 return "Binance (BNB)"
-            case "BTC_USD_daily_data.csv":
+            case "dados/BTC_USD_daily_data.csv":
                 return "Bitcoin (BTC)"
-            case 'ETH_USD_daily_data.csv':
+            case 'dados/ETH_USD_daily_data.csv':
                 return "Ethereum (ETH)"
-            case "SOL_USD_daily_data.csv":
+            case "dados/SOL_USD_daily_data.csv":
                 return "Solana (SOL)"
-            case "XRP_USD_daily_data.csv":
-                return "XRP ()"
+            case "dados/XRP_USD_daily_data.csv":
+                return "XRP (XRP)"
 
 
 if __name__ == "__main__":
     teste = DadosCripto("dados/BTC_USD_daily_data.csv")
-    data, valores_iniciais, valores_finais = teste.valores_entre_datas(23, 2, 2018, 27, 7, 2019)
-    print(f"dias: {data}\nvalor inicial do dia:{valores_iniciais}\nvalor final do dia:{valores_finais}")
+    # data, valores_iniciais, valores_finais = teste.valores_entre_datas(23, 2, 2018, 27, 7, 2019)
+    # print(f"dias: {data}\nvalor inicial do dia:{valores_iniciais}\nvalor final do dia:{valores_finais}")
+    a = teste.valores_entre_datas("2000-11-2", "2020-01-10")
+    print(a)
