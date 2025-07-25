@@ -16,6 +16,8 @@ eth = 2024-09-08
 sol = 2024-09-08
 xrp = 2024-09-08
 '''
+
+
 class DadosCripto:
     def __init__(self, tipo_da_cripto_csv):
         self.tipo_cripito = tipo_da_cripto_csv
@@ -236,6 +238,7 @@ class DadosCripto:
             df_resultado = pd.DataFrame()
 
         return df_resultado
+
     def retornar_todo_df(self, coluna=None):
         match coluna:
             case "Date":

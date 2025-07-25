@@ -159,7 +159,7 @@ class Dashboard:
                     id='grafico_criptos',
                     figure=self.abrir_grafico()
                 ),
-                html.H2(children="obter grafico entre datas (dia-mes-ano)",
+                html.H2(children="obter grafico entre datas (ano/mes/dia)",
                         style=self.retornar_estilo_fontes_centralizado()),
                 dcc.DatePickerRange(
                     id="calendario_distancia_das_datas",
@@ -233,4 +233,4 @@ class Dashboard:
 
     def abrir_janela(self):
         self.layout()
-        self.app.run(debug=True)
+        self.app.run(debug=False)
