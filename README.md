@@ -3,6 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![Dash](https://img.shields.io/badge/Dash-v2.0-orange)
 ![Plotly](https://img.shields.io/badge/Plotly-v5.0-purple)
+![Plotly](https://img.shields.io/badge/Pandas-gray)
 
 ---
 
@@ -45,25 +46,6 @@ Utilizando a biblioteca **Dash** para interface web e **Plotly** para gráficos,
 - |`dados.py` — módulo com a classe `DadosCripto` responsável pelo carregamento e manipulação dos dados CSV.
 - |`main.py` — script principal que inicializa e executa o dashboard.
 
----
-
-## Como usar
-
-1. Clone o projeto:  
-   `git clone <url-do-repositorio>`
-
-2. Crie e ative um ambiente virtual (opcional, mas recomendado):  
-   - Linux/macOS: `python -m venv venv && source venv/bin/activate`  
-   - Windows: `python -m venv venv && venv\Scripts\activate`
-
-3. Instale as dependências:  
-   `pip install pandas dash plotly`
-
-4. Rode o dashboard:  
-   `python main.py`
-
-5. Abra o navegador e acesse:  
-   `http://127.0.0.1:8050`
 
 ---
 
