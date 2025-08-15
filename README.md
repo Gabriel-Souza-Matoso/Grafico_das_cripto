@@ -37,11 +37,11 @@ Utilizando a biblioteca **Dash** para interface web e **Plotly** para gráficos,
 ## Estrutura do Projeto
 
 - |`dados/` — pasta contendo os arquivos CSV com os dados históricos das criptomoedas.
-    -|`BNB_USD_daily_data.csv`- dados da cripto moeda binance
-    -|`BTC_USD_daily_data.csv`- dados da cripto moeda bitcoin
-    -|`ETH_USD_daily_data.csv`- dados da cripto moeda etherium
-    -|`SOL_USD_daily_data.csv`- dados da cripto moeda solana
-    -|`XRP_USD_daily_data.csv`- dados da cripto moeda xrp
+      --|`BNB_USD_daily_data.csv`- dados da cripto moeda binance    
+    --|`BTC_USD_daily_data.csv`- dados da cripto moeda bitcoin    
+    --|`ETH_USD_daily_data.csv`- dados da cripto moeda etherium    
+    --|`SOL_USD_daily_data.csv`- dados da cripto moeda solana    
+    --|`XRP_USD_daily_data.csv`- dados da cripto moeda xrp    
 - |`graficos.py` — módulo com a classe `Dashboard` que implementa a interface gráfica e os gráficos.
 - |`dados.py` — módulo com a classe `DadosCripto` responsável pelo carregamento e manipulação dos dados CSV.
 - |`main.py` — script principal que inicializa e executa o dashboard.
