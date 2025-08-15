@@ -52,8 +52,8 @@ Utilizando a biblioteca **Dash** para interface web e **Plotly** para gráficos,
 ## Imagens do programa
 
 ### Tela Inicial
-![Tela Inicial](assets/graficoentredatas.png)
+![Tela Inicial](assets/grafico_BTC.png)
 
 ### grafico entre datas
-![Grafico entre datas](assets/graficoentredatas.png)
+![Grafico entre datas](assets/grafico_entre_datas.png)
 
